@@ -7,6 +7,9 @@ module.exports = {
     path: path.resolve(__dirname, "app"),
     filename: "bundled.js"
   },
+  resolve: {
+    extensions: ["*", ".js", ".jsx"]
+  },
   mode: "development",
   devtool: "source-map",
   devServer: {
@@ -19,7 +22,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /(node_modules)/,
         use: {
           loader: "babel-loader",
