@@ -16,6 +16,9 @@ function HeaderLoggedOut(props) {
         //set loggedIn to true if obviously correct details
         props.setLoggedIn(true);
         console.table(resposne.data);
+        localStorage.setItem("SocialAppToken", resposne.data.token);
+        localStorage.setItem("SocialAppUsername", resposne.data.username);
+        localStorage.setItem("SocialAppAvatar", resposne.data.avatar);
       } else {
         console.log("Incorrect username / password");
       }
