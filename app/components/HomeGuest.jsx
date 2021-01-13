@@ -9,7 +9,7 @@ function HomeGuest() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const host = "http://127.0.0.1:8080/register";
+    const host = "/register";
     // const username = "test2";
     // const email = "test2@test.com";
     // const password = "123456123456";

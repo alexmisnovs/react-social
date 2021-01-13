@@ -9,7 +9,7 @@ function HeaderLoggedOut(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const host = "http://127.0.0.1:8080/login";
+      const host = "/login";
       const resposne = await Axios.post(host, { username, password });
       // console.table(resposne.data);
       if (resposne.data) {
