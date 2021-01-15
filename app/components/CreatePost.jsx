@@ -10,12 +10,14 @@ function CreatePost(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const resposne = await Axios.post("/create-post", { title, body, token: localStorage.getItem("SocialAppToken") });
-      console.table("New post created");
+      const res = await Axios.post("/create-post", { title, body, token: localStorage.getItem("SocialAppToken") });
+      console.log(`New post created: ${res.data}`);
       // redirect to new post url
-      props.history.push(`/post/${resposne.data}`);
+      props.addFlashMessages("Congrats, you created a new post");
+      props.history.push(`/post/${res.data}`);
     } catch (e) {
-      console.table(e.response.data);
+      console.log("Fuck, somethings wrong");
+      // console.log(e.response.data);
     }
   }
 

@@ -11,22 +11,31 @@ import Home from "./components/Home";
 import About from "./components/About";
 import Terms from "./components/Terms";
 import CreatePost from "./components/CreatePost";
-import axios from "axios";
 import ViewSinglePost from "./components/ViewSinglePost";
+import FlashMessages from "./components/FlashMessages";
 
 function Main() {
   //STATE
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("SocialAppToken")));
+  const [flashMessages, setFlashMessages] = useState([]);
+
+  function addFlashMessage(msg) {
+    // push to the array, though without overriding state
+    setFlashMessages(prev => prev.concat(msg));
+  }
+
   return (
     <BrowserRouter>
       <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+
+      <FlashMessages messages={flashMessages} />
 
       <Switch>
         <Route path="/" exact>
           {loggedIn ? <Home /> : <HomeGuest />}
         </Route>
         <Route path="/create-post">
-          <CreatePost />
+          <CreatePost addFlashMessages={addFlashMessage} />
         </Route>
         <Route path="/post/:id">
           <ViewSinglePost />
