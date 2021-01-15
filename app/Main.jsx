@@ -12,6 +12,7 @@ import About from "./components/About";
 import Terms from "./components/Terms";
 import CreatePost from "./components/CreatePost";
 import axios from "axios";
+import ViewSinglePost from "./components/ViewSinglePost";
 
 function Main() {
   //STATE
@@ -24,13 +25,16 @@ function Main() {
         <Route path="/" exact>
           {loggedIn ? <Home /> : <HomeGuest />}
         </Route>
-        <Route path="/create-post" exact>
+        <Route path="/create-post">
           <CreatePost />
         </Route>
-        <Route path="/about-us" exact>
+        <Route path="/post/:id">
+          <ViewSinglePost />
+        </Route>
+        <Route path="/about-us">
           <About />
         </Route>
-        <Route path="/terms" exact>
+        <Route path="/terms">
           <Terms />
         </Route>
       </Switch>
