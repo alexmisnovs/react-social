@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import Axios from "axios";
-import ExampleContext from "../ExampleContext";
+import DispatchContext from "../DispatchContext";
 
 function HeaderLoggedOut(props) {
-  const { setLoggedIn } = useContext(ExampleContext);
+  const appDispatch = useContext(DispatchContext);
 
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
@@ -17,7 +17,7 @@ function HeaderLoggedOut(props) {
       // console.table(resposne.data);
       if (resposne.data) {
         //set loggedIn to true if obviously correct details
-        setLoggedIn(true);
+        appDispatch({ type: "login" });
         console.table(resposne.data);
         localStorage.setItem("SocialAppToken", resposne.data.token);
         localStorage.setItem("SocialAppUsername", resposne.data.username);

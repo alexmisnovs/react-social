@@ -1,13 +1,13 @@
 import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import ExampleContext from "../ExampleContext";
+import DispatchContext from "../DispatchContext";
 
 function HeaderLoggedIn(props) {
   // curly brackets are because we are destructuring an object what is being returned by context
-  const { setLoggedIn } = useContext(ExampleContext);
+  const appDispatch = useContext(DispatchContext);
 
   function handleSignout() {
-    setLoggedIn(false);
+    appDispatch({ type: "logout" });
     localStorage.removeItem("SocialAppToken");
     localStorage.removeItem("SocialAppUsername");
     localStorage.removeItem("SocialAppAvatar");
