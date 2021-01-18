@@ -1,16 +1,15 @@
 import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import DispatchContext from "../DispatchContext";
+import StateContext from "../StateContext";
 
 function HeaderLoggedIn(props) {
   // curly brackets are because we are destructuring an object what is being returned by context
   const appDispatch = useContext(DispatchContext);
+  const appState = useContext(StateContext);
 
   function handleSignout() {
     appDispatch({ type: "logout" });
-    localStorage.removeItem("SocialAppToken");
-    localStorage.removeItem("SocialAppUsername");
-    localStorage.removeItem("SocialAppAvatar");
   }
 
   return (
@@ -23,7 +22,7 @@ function HeaderLoggedIn(props) {
         <span className="chat-count-badge text-white"> </span>
       </span>
       <a href="#" className="mr-2">
-        <img className="small-header-avatar" src={localStorage.getItem("SocialAppAvatar")} />
+        <img className="small-header-avatar" src={appState.user.avatar} />
       </a>
       <Link to="/create-post" className="btn btn-sm btn-success mr-2">
         Create Post

@@ -13,15 +13,12 @@ function HeaderLoggedOut(props) {
     e.preventDefault();
     try {
       const host = "/login";
-      const resposne = await Axios.post(host, { username, password });
+      const response = await Axios.post(host, { username, password });
       // console.table(resposne.data);
-      if (resposne.data) {
+      if (response.data) {
         //set loggedIn to true if obviously correct details
-        appDispatch({ type: "login" });
-        console.table(resposne.data);
-        localStorage.setItem("SocialAppToken", resposne.data.token);
-        localStorage.setItem("SocialAppUsername", resposne.data.username);
-        localStorage.setItem("SocialAppAvatar", resposne.data.avatar);
+        appDispatch({ type: "login", data: response.data });
+        // console.table(resposne.data);
       } else {
         console.log("Incorrect username / password");
       }

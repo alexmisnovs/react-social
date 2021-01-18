@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Axios from "axios";
@@ -23,13 +23,19 @@ function Main() {
   // reducer
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("SocialAppToken")),
-    flashMessages: []
+    flashMessages: [],
+    user: {
+      token: localStorage.getItem("SocialAppToken"),
+      username: localStorage.getItem("SocialAppUsername"),
+      avatar: localStorage.getItem("SocialAppAvatar")
+    }
   };
 
   function ourReducer(draft, action) {
     switch (action.type) {
       case "login":
         draft.loggedIn = true;
+        draft.user = action.data;
         return;
       case "logout":
         draft.loggedIn = false;
@@ -42,6 +48,18 @@ function Main() {
   }
 
   const [state, dispatch] = useImmerReducer(ourReducer, initialState);
+
+  useEffect(() => {
+    if (state.loggedIn) {
+      localStorage.setItem("SocialAppToken", state.user.token);
+      localStorage.setItem("SocialAppUsername", state.user.username);
+      localStorage.setItem("SocialAppAvatar", state.user.avatar);
+    } else {
+      localStorage.removeItem("SocialAppToken");
+      localStorage.removeItem("SocialAppUsername");
+      localStorage.removeItem("SocialAppAvatar");
+    }
+  }, [state.loggedIn]);
 
   function addFlashMessage(msg) {
     // push to the array, though without overriding state
