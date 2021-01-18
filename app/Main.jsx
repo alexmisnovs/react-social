@@ -2,6 +2,8 @@ import React, { useState, useReducer } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Axios from "axios";
+import { useImmerReducer } from "use-immer";
+
 Axios.defaults.baseURL = "http://127.0.0.1:8080";
 //Components
 import Footer from "./components/Footer";
@@ -24,27 +26,22 @@ function Main() {
     flashMessages: []
   };
 
-  function ourReducer(state, action) {
+  function ourReducer(draft, action) {
     switch (action.type) {
       case "login":
-        return {
-          loggedIn: true,
-          flashMessages: state.flashMessages
-        };
+        draft.loggedIn = true;
+        return;
       case "logout":
-        return {
-          loggedIn: false,
-          flashMessages: state.flashMessages
-        };
+        draft.loggedIn = false;
+        return;
       case "flashMessage":
-        return {
-          loggedIn: state.loggedIn,
-          flashMessages: state.flashMessages.concat(action.value)
-        };
+        // using push instaed of concat because immer gives us a copy of the state
+        draft.flashMessages.push(action.value);
+        return;
     }
   }
 
-  const [state, dispatch] = useReducer(ourReducer, initialState);
+  const [state, dispatch] = useImmerReducer(ourReducer, initialState);
 
   function addFlashMessage(msg) {
     // push to the array, though without overriding state
