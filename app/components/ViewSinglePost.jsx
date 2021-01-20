@@ -3,11 +3,14 @@ import { useParams, Link } from "react-router-dom";
 import Page from "./Page";
 import Axios from "axios";
 
+// components
+import LoadingIcon from "./LoadingIcon";
+
 function ViewSinglePost(props) {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [post, setPost] = useState();
-  // aded the error
+  // added the error
   const [notFounderror, setNotFoundError] = useState(false);
 
   useEffect(() => {
@@ -39,7 +42,7 @@ function ViewSinglePost(props) {
   if (isLoading) {
     return (
       <Page title="Loading.. ">
-        <div>Loading..</div>
+        <LoadingIcon />
       </Page>
     );
   }
