@@ -20,11 +20,18 @@ function Profile() {
       followingCount: ""
     }
   });
+  // added the error
+  const [notFounderror, setNotFoundError] = useState(false);
 
   useEffect(() => {
+    const ourRequest = Axios.CancelToken.source();
     async function fetchData() {
       try {
-        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token });
+        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token });
+        if (!response.data) {
+          console.log(response.data);
+          setNotFoundError(true);
+        }
         setProfileData(response.data);
         // console.log(response.data);
       } catch (e) {
@@ -32,7 +39,19 @@ function Profile() {
       }
     }
     fetchData();
+
+    return () => {
+      ourRequest.cancel();
+    };
   }, []);
+
+  if (notFounderror) {
+    return (
+      <Page title="Profile Not Found.. ">
+        <div>Profile Not Found..</div>
+      </Page>
+    );
+  }
 
   return (
     <Page title="Profile">

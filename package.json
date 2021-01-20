@@ -18,6 +18,7 @@
     "immer": "^8.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
     "use-immer": "^0.4.2",
     "webpack": "^5.12.1",

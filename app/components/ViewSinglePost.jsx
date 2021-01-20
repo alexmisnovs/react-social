@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Page from "./Page";
 import Axios from "axios";
+import ReactMarkdown from "react-markdown";
 
 // components
 import LoadingIcon from "./LoadingIcon";
@@ -11,12 +12,13 @@ function ViewSinglePost(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [post, setPost] = useState();
   // added the error
-  const [notFounderror, setNotFoundError] = useState(false);
+  const [notFoundError, setNotFoundError] = useState(false);
 
   useEffect(() => {
+    const ourRequest = Axios.CancelToken.source();
     async function fetchPost() {
       try {
-        const response = await Axios.get(`/post/${id}`);
+        const response = await Axios.get(`/post/${id}`, { cancelToken: ourRequest.token });
         // Added a way to stop application breaking if post id is not found
         if (!response.data) {
           setNotFoundError(true);
@@ -29,9 +31,13 @@ function ViewSinglePost(props) {
       }
     }
     fetchPost();
+    // cleanup
+    return () => {
+      ourRequest.cancel();
+    };
   }, []);
 
-  if (notFounderror) {
+  if (notFoundError) {
     return (
       <Page title="Post Not Found.. ">
         <div>Post Not Found..</div>
@@ -72,7 +78,7 @@ function ViewSinglePost(props) {
       </p>
 
       <div className="body-content">
-        <p>{post.body}</p>
+        <ReactMarkdown children={post.body} allowedTypes={["paragraph", "strong", "emphasis", "text", "heading", "list", "listItem"]} />
       </div>
     </Page>
   );
