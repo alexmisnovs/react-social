@@ -1,11 +1,56 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import Page from "./Page";
+import Axios from "axios";
 
 function ViewSinglePost(props) {
+  const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [post, setPost] = useState();
+  // aded the error
+  const [notFounderror, setNotFoundError] = useState(false);
+
+  useEffect(() => {
+    async function fetchPost() {
+      try {
+        const response = await Axios.get(`/post/${id}`);
+        // Added a way to stop application breaking if post id is not found
+        if (!response.data) {
+          setNotFoundError(true);
+        }
+        console.log(response.data);
+        setPost(response.data);
+        setIsLoading(false);
+      } catch (e) {
+        console.log("There was a problem, with View Signle Post Request");
+      }
+    }
+    fetchPost();
+  }, []);
+
+  if (notFounderror) {
+    return (
+      <Page title="Post Not Found.. ">
+        <div>Post Not Found..</div>
+      </Page>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Page title="Loading.. ">
+        <div>Loading..</div>
+      </Page>
+    );
+  }
+
+  const date = new Date(post.createdDate);
+  const dateFormatted = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+
   return (
-    <Page title="Temp hard coded title">
+    <Page title={post.title}>
       <div className="d-flex justify-content-between">
-        <h2>Example Post Title</h2>
+        <h2>{post.title}</h2>
         <span className="pt-2">
           <a href="#" className="text-primary mr-2" title="Edit">
             <i className="fas fa-edit"></i>
@@ -17,14 +62,14 @@ function ViewSinglePost(props) {
       </div>
 
       <p className="text-muted small mb-4">
-        <a href="#">
-          <img className="avatar-tiny" src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128" />
-        </a>
-        Posted by <a href="#">brad</a> on 2/10/2020
+        <Link to={`/profile/${post.author.username}`}>
+          <img className="avatar-tiny" src={post.author.avatar} />
+        </Link>
+        Posted by <Link to={`/profile/${post.author.username}`}>{post.author.username}</Link> on {dateFormatted}
       </p>
 
       <div className="body-content">
-        <p>Dynamic Content here</p>
+        <p>{post.body}</p>
       </div>
     </Page>
   );
