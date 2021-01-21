@@ -24,7 +24,6 @@ function ViewSinglePost(props) {
         if (!response.data) {
           setNotFoundError(true);
         }
-        console.log(response.data);
         setPost(response.data);
         setIsLoading(false);
       } catch (e) {
@@ -62,9 +61,9 @@ function ViewSinglePost(props) {
       <div className="d-flex justify-content-between">
         <h2>{post.title}</h2>
         <span className="pt-2">
-          <a href="#" data-tip="Edit Post" data-for="editButton" className="text-primary mr-2">
+          <Link to={`/post/${post._id}/edit`} data-tip="Edit Post" data-for="editButton" className="text-primary mr-2">
             <i className="fas fa-edit"></i>
-          </a>
+          </Link>
           <ReactToolTip id="editButton" className="custom-tooltip" />{" "}
           <a data-tip="Delete Post" data-for="deleteButton" className="delete-post-button text-danger">
             <i className="fas fa-trash"></i>

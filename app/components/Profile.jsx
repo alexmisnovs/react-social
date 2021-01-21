@@ -29,7 +29,6 @@ function Profile() {
       try {
         const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token });
         if (!response.data) {
-          console.log(response.data);
           setNotFoundError(true);
         }
         setProfileData(response.data);
