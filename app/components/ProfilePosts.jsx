@@ -22,7 +22,7 @@ function ProfilePosts() {
         if (!response.data) {
           setNotFoundError(true);
         }
-        console.log(response.data);
+        // console.log(response.data);
         setPosts(response.data);
         setIsloading(false);
       } catch (e) {

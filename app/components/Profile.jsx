@@ -5,6 +5,7 @@ import StateContext from "../StateContext";
 
 import Page from "./Page";
 import ProfilePosts from "./ProfilePosts";
+import NotFound from "./NotFound";
 
 function Profile() {
   //
@@ -45,11 +46,7 @@ function Profile() {
   }, []);
 
   if (notFounderror) {
-    return (
-      <Page title="Profile Not Found.. ">
-        <div>Profile Not Found..</div>
-      </Page>
-    );
+    return <NotFound type="profile" />;
   }
 
   return (

@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useImmerReducer } from "use-immer";
-import { useParams, withRouter } from "react-router-dom";
-
+import { Link, useParams, withRouter } from "react-router-dom";
+// 3rd party
 import Axios from "axios";
-
 // components
 import LoadingIcon from "./LoadingIcon";
 import Page from "./Page";
+import NotFound from "./NotFound";
 //Context
 import DispatchContext from "../DispatchContext";
 import StateContext from "../StateContext";
@@ -27,7 +27,8 @@ function EditPost(props) {
     isFetching: true,
     isSaving: false,
     id: useParams().id,
-    sendCount: 0
+    sendCount: 0,
+    notFound: false
   };
 
   function ourReducer(draft, action) {
@@ -36,6 +37,9 @@ function EditPost(props) {
         draft.title.value = action.value.title;
         draft.body.value = action.value.body;
         draft.isFetching = false;
+        return;
+      case "FETCH_FAILED":
+        draft.notFound = true;
         return;
       case "TITLE_CHANGE":
         draft.title.hasErrors = false;
@@ -85,7 +89,13 @@ function EditPost(props) {
         const response = await Axios.get(`/post/${state.id}`, { cancelToken: ourRequest.token });
         // Added a way to stop application breaking if post id is not found
         if (!response.data) {
-          setNotFoundError(true);
+          //setNotFoundError(true);
+          dispatch({ type: "FETCH_FAILED" });
+        }
+        // if failed on permissions
+        if (appState.user.username != response.data.author.username) {
+          appDispatch({ type: "flashMessage", value: `You dont have permission to edit this post` });
+          props.history.push(`/post/${state.id}`);
         }
         dispatch({ type: "FETCH_COMPLETE", value: response.data });
       } catch (e) {
@@ -131,12 +141,8 @@ function EditPost(props) {
     }
   }, [state.sendCount]);
 
-  if (notFoundError) {
-    return (
-      <Page title="Post Not Found.. ">
-        <div>Post Not Found..</div>
-      </Page>
-    );
+  if (state.notFound) {
+    return <NotFound type="post" />;
   }
 
   if (state.isFetching) {
@@ -156,7 +162,10 @@ function EditPost(props) {
 
   return (
     <Page title={`Edit : post.title`}>
-      <form onSubmit={handleUpdate}>
+      <Link className="small font-weight-bold" to={`/post/${state.id}`}>
+        &laquo; Back to post
+      </Link>
+      <form className="mt-3" onSubmit={handleUpdate}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>
