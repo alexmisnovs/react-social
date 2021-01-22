@@ -93,7 +93,7 @@ function EditPost(props) {
         }
         // if failed on permissions
         if (appState.user.username != response.data.author.username) {
-          appDispatch({ type: "flashMessage", value: `You dont have permission to edit this post` });
+          appDispatch({ type: "FLASH_MESSAGE", value: `You dont have permission to edit this post` });
           props.history.push(`/post/${state.id}`);
         }
         dispatch({ type: "FETCH_COMPLETE", value: response.data });
@@ -125,7 +125,7 @@ function EditPost(props) {
           );
           dispatch({ type: "SAVE_REQUEST_FINISHED" });
           // redirect to new post url
-          appDispatch({ type: "flashMessage", value: `Congrats, you have updated the post id ${state.id}` });
+          appDispatch({ type: "FLASH_MESSAGE", value: `Congrats, you have updated the post id ${state.id}` });
           props.history.push(`/post/${state.id}`);
         } catch (e) {
           console.log("Handle Update Post, somethings went wrong");

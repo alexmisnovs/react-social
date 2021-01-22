@@ -17,7 +17,7 @@ function HeaderLoggedOut(props) {
       // console.table(resposne.data);
       if (response.data) {
         //set loggedIn to true if obviously correct details
-        appDispatch({ type: "login", data: response.data });
+        appDispatch({ type: "LOGIN", data: response.data });
         // console.table(resposne.data);
       } else {
         console.log("Incorrect username / password");

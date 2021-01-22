@@ -67,7 +67,7 @@ function ViewSinglePost(props) {
         // server returns a string..
         if (response.data == "Success") {
           // display a flash message
-          appDispatch({ type: "flashMessage", value: `Post "${post.title}" deleted..` });
+          appDispatch({ type: "FLASH_MESSAGE", value: `Post "${post.title}" deleted..` });
 
           //redirect
           props.history.push(`/profile/${appState.user.username}`);

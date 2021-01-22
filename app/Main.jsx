@@ -18,6 +18,7 @@ import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import NotFound from "./components/NotFound";
+import Search from "./components/Search";
 
 //State Contexts
 import StateContext from "./StateContext";
@@ -32,21 +33,28 @@ function Main() {
       token: localStorage.getItem("SocialAppToken"),
       username: localStorage.getItem("SocialAppUsername"),
       avatar: localStorage.getItem("SocialAppAvatar")
-    }
+    },
+    isSearchOpen: false
   };
 
   function ourReducer(draft, action) {
     switch (action.type) {
-      case "login":
+      case "LOGIN":
         draft.loggedIn = true;
         draft.user = action.data;
         return;
-      case "logout":
+      case "LOGOUT":
         draft.loggedIn = false;
         return;
-      case "flashMessage":
+      case "FLASH_MESSAGE":
         // using push instaed of concat because immer gives us a copy of the state
         draft.flashMessages.push(action.value);
+        return;
+      case "OPEN_SEARCH":
+        draft.isSearchOpen = true;
+        return;
+      case "CLOSE_SEARCH":
+        draft.isSearchOpen = false;
         return;
     }
   }
@@ -64,11 +72,6 @@ function Main() {
       localStorage.removeItem("SocialAppAvatar");
     }
   }, [state.loggedIn]);
-
-  function addFlashMessage(msg) {
-    // push to the array, though without overriding state
-    setFlashMessages(prev => prev.concat(msg));
-  }
 
   return (
     <StateContext.Provider value={state}>
@@ -104,7 +107,7 @@ function Main() {
               <NotFound />
             </Route>
           </Switch>
-
+          {state.isSearchOpen ? <Search /> : ""}
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>

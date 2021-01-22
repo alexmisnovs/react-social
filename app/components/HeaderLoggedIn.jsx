@@ -9,7 +9,7 @@ function HeaderLoggedIn(props) {
   const appState = useContext(StateContext);
 
   function handleSignout() {
-    appDispatch({ type: "logout" });
+    appDispatch({ type: "LOGOUT" });
   }
 
   return (
