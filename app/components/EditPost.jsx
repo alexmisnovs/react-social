@@ -76,7 +76,6 @@ function EditPost(props) {
   }
   const [state, dispatch] = useImmerReducer(ourReducer, originalState);
   // added the error
-  const [notFoundError, setNotFoundError] = useState(false);
 
   const appDispatch = useContext(DispatchContext);
   const appState = useContext(StateContext);

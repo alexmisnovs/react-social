@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, withRouter } from "react-router-dom";
 import Page from "./Page";
 import Axios from "axios";
 import ReactMarkdown from "react-markdown";
@@ -10,6 +10,7 @@ import LoadingIcon from "./LoadingIcon";
 import NotFound from "./NotFound";
 
 // Context
+import DispatchContext from "../DispatchContext";
 import StateContext from "../StateContext";
 
 function ViewSinglePost(props) {
@@ -19,6 +20,7 @@ function ViewSinglePost(props) {
   // added the error
   const [notFoundError, setNotFoundError] = useState(false);
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
 
   useEffect(() => {
     const ourRequest = Axios.CancelToken.source();
@@ -57,6 +59,25 @@ function ViewSinglePost(props) {
   const date = new Date(post.createdDate);
   const dateFormatted = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 
+  async function deleteHandler() {
+    const areYouSure = window.confirm("Do you really want to delete this link?");
+    if (areYouSure) {
+      try {
+        const response = await Axios.delete(`/post/${id}`, { data: { token: appState.user.token } });
+        // server returns a string..
+        if (response.data == "Success") {
+          // display a flash message
+          appDispatch({ type: "flashMessage", value: `Post "${post.title}" deleted..` });
+
+          //redirect
+          props.history.push(`/profile/${appState.user.username}`);
+        }
+      } catch (e) {
+        console.log("problem deleting");
+      }
+    }
+  }
+
   return (
     <Page title={post.title}>
       <div className="d-flex justify-content-between">
@@ -67,7 +88,7 @@ function ViewSinglePost(props) {
               <i className="fas fa-edit"></i>
             </Link>
             <ReactToolTip id="editButton" className="custom-tooltip" />{" "}
-            <a data-tip="Delete Post" data-for="deleteButton" className="delete-post-button text-danger">
+            <a onClick={deleteHandler} data-tip="Delete Post" data-for="deleteButton" className="delete-post-button text-danger">
               <i className="fas fa-trash"></i>
             </a>
             <ReactToolTip id="deleteButton" className="custom-tooltip" />
@@ -89,4 +110,4 @@ function ViewSinglePost(props) {
   );
 }
 
-export default ViewSinglePost;
+export default withRouter(ViewSinglePost);
