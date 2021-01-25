@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 
@@ -107,7 +108,9 @@ function Main() {
               <NotFound />
             </Route>
           </Switch>
-          {state.isSearchOpen ? <Search /> : ""}
+          <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
+            <Search />
+          </CSSTransition>
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>
