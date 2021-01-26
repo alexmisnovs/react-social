@@ -42,7 +42,7 @@ function ViewSinglePost(props) {
     return () => {
       ourRequest.cancel();
     };
-  }, []);
+  }, [id]); // we want to send this request each time the ID is changing
 
   if (notFoundError) {
     return <NotFound type="post" />;
