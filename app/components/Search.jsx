@@ -4,6 +4,8 @@ import { useImmer } from "use-immer"; // similar to reacts version
 import Axios from "axios";
 import DispatchContext from "../DispatchContext";
 
+// playing around with
+
 function Search() {
   const [state, setState] = useImmer({
     searchTerm: "",

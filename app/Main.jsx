@@ -74,6 +74,21 @@ function Main() {
     }
   }, [state.loggedIn]);
 
+  // custom added to be able to use cmd + F functionality on the site.
+  function searchKeyPressHandler(e) {
+    if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.keyCode == 70) {
+      e.preventDefault();
+      // Process the event here
+      dispatch({ type: "OPEN_SEARCH" });
+    }
+  }
+  useEffect(() => {
+    document.addEventListener("keydown", searchKeyPressHandler);
+    return () => {
+      document.removeEventListener("keydown", searchKeyPressHandler);
+    };
+  }, []);
+
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
