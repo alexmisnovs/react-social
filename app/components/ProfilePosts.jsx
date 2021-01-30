@@ -34,7 +34,7 @@ function ProfilePosts() {
     return () => {
       ourRequest.cancel();
     };
-  }, []);
+  }, [username]);
   if (notFounderror) {
     return (
       <Page title="Profile Not Found.. ">

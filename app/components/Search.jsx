@@ -21,8 +21,10 @@ function Search() {
   }
   useEffect(() => {
     document.addEventListener("keyup", searchKeyPressHandler);
+    document.addEventListener("keydown", searchKeyPressHandler2);
     return () => {
       document.removeEventListener("keyup", searchKeyPressHandler);
+      document.removeEventListener("keydown", searchKeyPressHandler2);
     };
   }, []);
 
@@ -77,6 +79,14 @@ function Search() {
       closeSearch();
     }
   }
+  function searchKeyPressHandler2(e) {
+    if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.keyCode == 70) {
+      e.preventDefault();
+      // Process the event here
+      closeSearch();
+    }
+  }
+
   function handleSearchInput(event) {
     const value = event.target.value;
     setState(draft => {
