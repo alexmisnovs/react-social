@@ -8,8 +8,6 @@ import Page from "./Page";
 import ProfilePosts from "./ProfilePosts";
 import NotFound from "./NotFound";
 import ProfileFollow from "./ProfileFollow";
-import ProfileFollowing from "./ProfileFollowing";
-import ProfileFollowers from "./ProfileFollowers";
 
 function Profile() {
   //
