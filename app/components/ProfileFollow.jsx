@@ -27,6 +27,7 @@ function ProfileFollow(props) {
     fetchProfileFollows();
     // cleanup
     return () => {
+      console.log(`Unmounting ${props.action}`);
       ourRequest.cancel();
     };
   }, [props.action]);
