@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import { useImmer } from "use-immer"; // similar to reacts version
 import Axios from "axios";
 import DispatchContext from "../DispatchContext";
+import Post from "./Post";
 
 // playing around with
 
@@ -118,17 +119,7 @@ function Search() {
                   <strong>Search Results</strong> ({state.results.length} {state.results.length > 1 ? "items" : "item"} found)
                 </div>
                 {state.results.map(post => {
-                  const date = new Date(post.createdDate);
-                  const dateFormatted = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-                  return (
-                    <Link onClick={closeSearch} to={`/post/${post._id}`} key={post._id} href="#" className="list-group-item list-group-item-action">
-                      <img className="avatar-tiny" src={post.author.avatar} /> <strong>{post.title}</strong>{" "}
-                      <span className="text-muted small">
-                        {" "}
-                        by {post.author.username} on {dateFormatted}{" "}
-                      </span>
-                    </Link>
-                  );
+                  return <Post post={post} key={post._id} onClick={closeSearch} />;
                 })}
               </div>
             )}

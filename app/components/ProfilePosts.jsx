@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Axios from "axios";
-import Page from "./Page";
 //components
 import LoadingIcon from "./LoadingIcon";
+import Page from "./Page";
+import Post from "./Post";
 /**
  * TODO: Add a Not Found component
  */
@@ -47,13 +48,7 @@ function ProfilePosts() {
   return (
     <div className="list-group">
       {posts.map(post => {
-        const date = new Date(post.createdDate);
-        const dateFormatted = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-        return (
-          <Link to={`/post/${post._id}`} key={post._id} href="#" className="list-group-item list-group-item-action">
-            <img className="avatar-tiny" src={post.author.avatar} /> <strong>{post.title}</strong> <span className="text-muted small">on {dateFormatted} </span>
-          </Link>
-        );
+        return <Post noAuthor={true} post={post} key={post._id} />;
       })}
     </div>
   );
