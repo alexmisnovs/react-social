@@ -16,6 +16,9 @@ function HeaderLoggedIn(props) {
     e.preventDefault();
     appDispatch({ type: "OPEN_SEARCH" });
   }
+  function handleChatIcon() {
+    appDispatch({ type: "TOGGLE_CHAT" });
+  }
 
   return (
     <div className="flex-row my-3 my-md-0">
@@ -23,7 +26,7 @@ function HeaderLoggedIn(props) {
         <i className="fas fa-search"></i>
       </a>
       <ReactToolTip place="bottom" id="searchButton" className="custom-tooltip" />{" "}
-      <span data-tip="Chat" data-for="chatButton" className="mr-2 header-chat-icon text-white">
+      <span onClick={handleChatIcon} data-tip="Chat" data-for="chatButton" className="mr-2 header-chat-icon text-white">
         <i className="fas fa-comment"></i>
         <span className="chat-count-badge text-white"> </span>
       </span>
