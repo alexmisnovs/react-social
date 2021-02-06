@@ -2,6 +2,16 @@ import React, { useEffect, useContext, useRef } from "react";
 import StateContext from "../StateContext";
 import DispatchContext from "../DispatchContext";
 import { useImmer } from "use-immer";
+import io from "socket.io-client";
+
+const socket = io("http://127.0.0.1:8080", {
+  reconnection: false
+});
+
+console.log("check 1", socket.connected);
+socket.on("connect", function () {
+  console.log("check 2", socket.connected);
+});
 
 function Chat() {
   const chatField = useRef(null);
@@ -32,6 +42,13 @@ function Chat() {
     }
   }, [appState.isChatOpen]);
 
+  useEffect(() => {
+    socket.on("chatFromServer", message => {
+      setState(draft => {
+        draft.chatMessages.push(message);
+      });
+    });
+  }, []);
   function handleFieldChange(e) {
     const value = e.target.value;
     setState(draft => {
@@ -43,6 +60,10 @@ function Chat() {
     e.preventDefault();
     //finished here
     // send message to chat server
+    socket.emit("chatFromBrowser", {
+      token: appState.user.token,
+      message: state.fieldValue
+    });
 
     console.log(state.fieldValue);
     // chatField.current.value = ""; this works as well
@@ -78,7 +99,7 @@ function Chat() {
             );
           }
           return (
-            <div className="chat-other">
+            <div key={index} className="chat-other">
               <a href="#">
                 <img className="avatar-tiny" src={message.avatar} />
               </a>
@@ -86,7 +107,7 @@ function Chat() {
                 <div className="chat-message-inner">
                   <a href="#">
                     <strong>{message.username}</strong>
-                  </a>
+                  </a>{" "}
                   {message.message}
                 </div>
               </div>
