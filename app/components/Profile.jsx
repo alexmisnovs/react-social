@@ -128,6 +128,19 @@ function Profile() {
     return <NotFound type="profile" />;
   }
 
+  if(!appState.user.token){
+    return (
+      <Page title="Please register ">
+              <h2>
+        <img className="avatar-small" src={state.profileData.profileAvatar} /> {state.profileData.profileUsername}
+      
+      </h2>
+        <div>Only registered users can view posts</div>
+        <p>It takes less than a minute to register!</p>
+      </Page>
+    );
+  }
+
   return (
     <Page title="Profile">
       <h2>

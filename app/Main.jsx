@@ -20,11 +20,11 @@ import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import NotFound from "./components/NotFound";
 import Search from "./components/Search";
-
+import Chat from "./components/Chat";
 //State Contexts
 import StateContext from "./StateContext";
 import DispatchContext from "./DispatchContext";
-import Chat from "./components/Chat";
+
 
 function Main() {
   // reducer
@@ -79,6 +79,9 @@ function Main() {
       localStorage.removeItem("SocialAppToken");
       localStorage.removeItem("SocialAppUsername");
       localStorage.removeItem("SocialAppAvatar");
+        // need to refresh the page otherwise can still access stuff after logout
+      dispatch({type: "LOGOUT"})
+    
     }
   }, [state.loggedIn]);
 
