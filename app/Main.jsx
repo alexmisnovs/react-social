@@ -25,7 +25,6 @@ import Chat from "./components/Chat";
 import StateContext from "./StateContext";
 import DispatchContext from "./DispatchContext";
 
-
 function Main() {
   // reducer
   const initialState = {
@@ -37,7 +36,8 @@ function Main() {
       avatar: localStorage.getItem("SocialAppAvatar")
     },
     isSearchOpen: false,
-    isChatOpen: false
+    isChatOpen: false,
+    unreadChatCount: 0
   };
 
   function ourReducer(draft, action) {
@@ -65,6 +65,12 @@ function Main() {
       case "TOGGLE_CHAT":
         draft.isChatOpen = !draft.isChatOpen;
         return;
+      case "INCREMENT_UNREAD_MESSAGE_COUNT":
+        draft.unreadChatCount++;
+        return;
+      case "CLEAR_UNREAD_CHAT_COUNT":
+        draft.unreadChatCount = 0;
+        return;
     }
   }
 
@@ -79,9 +85,8 @@ function Main() {
       localStorage.removeItem("SocialAppToken");
       localStorage.removeItem("SocialAppUsername");
       localStorage.removeItem("SocialAppAvatar");
-        // need to refresh the page otherwise can still access stuff after logout
-      dispatch({type: "LOGOUT"})
-    
+      // need to refresh the page otherwise can still access stuff after logout
+      dispatch({ type: "LOGOUT" });
     }
   }, [state.loggedIn]);
 

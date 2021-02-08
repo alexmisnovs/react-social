@@ -1,8 +1,10 @@
 import React, { useEffect, useContext, useRef } from "react";
-import StateContext from "../StateContext";
-import DispatchContext from "../DispatchContext";
+import { Link } from "react-router-dom";
 import { useImmer } from "use-immer";
 import io from "socket.io-client";
+
+import StateContext from "../StateContext";
+import DispatchContext from "../DispatchContext";
 
 const socket = io("http://127.0.0.1:8080", {
   reconnection: false
@@ -15,6 +17,7 @@ socket.on("connect", function () {
 
 function Chat() {
   const chatField = useRef(null);
+  const chatLog = useRef(null);
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
 
@@ -30,15 +33,11 @@ function Chat() {
     };
   }, []);
 
-  function searchKeyPressHandler(event) {
-    if (event.keyCode == 27) {
-      closeSearch();
-    }
-  }
   useEffect(() => {
     if (appState.isChatOpen) {
       chatField.current.focus(); // react way of doing same shit
       //document.getElementById("chatField").focus(); not react way..
+      appDispatch({ type: "CLEAR_UNREAD_CHAT_COUNT" });
     }
   }, [appState.isChatOpen]);
 
@@ -49,6 +48,22 @@ function Chat() {
       });
     });
   }, []);
+
+  // make sure chat stays on the bottom
+  useEffect(() => {
+    // document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
+    chatLog.current.scrollTop = chatLog.current.scrollHeight;
+    if (state.chatMessages.length && !appState.isChatOpen) {
+      appDispatch({ type: "INCREMENT_UNREAD_MESSAGE_COUNT" });
+    }
+  }, [state.chatMessages]);
+
+  function searchKeyPressHandler(event) {
+    if (event.keyCode == 27) {
+      closeChat();
+    }
+  }
+
   function handleFieldChange(e) {
     const value = e.target.value;
     setState(draft => {
@@ -65,8 +80,6 @@ function Chat() {
       message: state.fieldValue
     });
 
-    console.log(state.fieldValue);
-    // chatField.current.value = ""; this works as well
     setState(draft => {
       // add message to state collection
       draft.chatMessages.push({ message: state.fieldValue, username: appState.user.username, avatar: appState.user.avatar });
@@ -86,13 +99,13 @@ function Chat() {
           <i className="fas fa-times-circle"></i>
         </span>
       </div>
-      <div id="chat" className="chat-log">
+      <div id="chat" ref={chatLog} className="chat-log">
         {state.chatMessages.map((message, index) => {
           if (message.username == appState.user.username) {
             return (
               <div key={index} className="chat-self">
                 <div className="chat-message">
-                  <div className="chat-message-inner">{message.message}</div>
+                  <div className="chat-message-inner"> {message.message}</div>
                 </div>
                 <img className="chat-avatar avatar-tiny" src={message.avatar} />
               </div>
@@ -100,14 +113,14 @@ function Chat() {
           }
           return (
             <div key={index} className="chat-other">
-              <a href="#">
+              <Link to={`/profile/${message.username}`}>
                 <img className="avatar-tiny" src={message.avatar} />
-              </a>
+              </Link>
               <div className="chat-message">
                 <div className="chat-message-inner">
-                  <a href="#">
-                    <strong>{message.username}</strong>
-                  </a>{" "}
+                  <Link to={`/profile/${message.username}`}>
+                    <strong>{message.username} </strong>
+                  </Link>{" "}
                   {message.message}
                 </div>
               </div>
