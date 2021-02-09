@@ -163,7 +163,6 @@ function HomeGuest() {
 
         return;
       case "PASSWORD_AFTER_DELAY":
-        console.log(draft.password.value.length);
         if (draft.password.value.length < 5) {
           draft.password.hasErrors = true;
           draft.password.message = "Password must be at least 5 characters";
