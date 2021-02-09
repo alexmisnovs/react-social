@@ -39,7 +39,7 @@ function Search() {
         setState(draft => {
           draft.requestCount++;
         });
-        console.log(state.searchTerm);
+        // console.log(state.searchTerm);
       }, 1000);
       // cleanup function will also run next time this useEffect will run again.
       return () => clearTimeout(delay);
