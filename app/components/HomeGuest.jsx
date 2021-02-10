@@ -269,7 +269,7 @@ function HomeGuest() {
         try {
           const response = await Axios.post(`/register`, { username: state.username.value, email: state.email.value, password: state.password.value }, { cancelToken: ourRequest.token });
           appDispatch({ type: "LOGIN", data: response.data });
-          appDispatch({ type: "FLASH_MESSAGE", value: "Congrats, welcome to your new account" });
+          appDispatch({ type: "FLASH_MESSAGE", value: "Congrats, welcome to your new account", status: "success" });
         } catch (e) {
           console.log("There was a problem, with registering the user");
         }

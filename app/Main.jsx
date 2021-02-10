@@ -30,6 +30,8 @@ function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("SocialAppToken")),
     flashMessages: [],
+    flashMessageStatus: false,
+    flashMessagesSeen: 0,
     user: {
       token: localStorage.getItem("SocialAppToken"),
       username: localStorage.getItem("SocialAppUsername"),
@@ -52,6 +54,8 @@ function Main() {
       case "FLASH_MESSAGE":
         // using push instaed of concat because immer gives us a copy of the state
         draft.flashMessages.push(action.value);
+        draft.flashMessageStatus = action.status;
+        draft.flashMessagesSeen++;
         return;
       case "OPEN_SEARCH":
         draft.isSearchOpen = true;
@@ -70,6 +74,11 @@ function Main() {
         return;
       case "CLEAR_UNREAD_CHAT_COUNT":
         draft.unreadChatCount = 0;
+        return;
+      case "CLEAR_SEEN_FLASH_MESSAGES":
+        draft.flashMessages = [];
+        draft.flashMessageStatus = "";
+        draft.flashMessagesSeen = 0;
         return;
     }
   }
@@ -105,13 +114,24 @@ function Main() {
     };
   }, []);
 
+  //cleanup Displayed Flash Messages?
+  useEffect(() => {
+    if (state.flashMessagesSeen > 0) {
+      const delay = setTimeout(() => {
+        dispatch({ type: "CLEAR_SEEN_FLASH_MESSAGES" });
+      }, 1000);
+      // cleanup function will also run next time this useEffect will run again.
+      return () => clearTimeout(delay);
+    }
+  }, [state.flashMessagesSeen]);
+
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
           <Header />
 
-          <FlashMessages messages={state.flashMessages} />
+          <FlashMessages messages={state.flashMessages} status={state.flashMessageStatus} />
 
           <Switch>
             <Route path="/" exact>

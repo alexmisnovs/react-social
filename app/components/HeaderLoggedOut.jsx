@@ -18,9 +18,11 @@ function HeaderLoggedOut(props) {
       if (response.data) {
         //set loggedIn to true if obviously correct details
         appDispatch({ type: "LOGIN", data: response.data });
+        appDispatch({ type: "FLASH_MESSAGE", value: "You have successfully logged in", status: "success" });
         // console.table(resposne.data);
       } else {
         console.log("Incorrect username / password");
+        appDispatch({ type: "FLASH_MESSAGE", value: "Invalid username / password", status: "fail" });
       }
     } catch (e) {
       console.table(e.response.data);

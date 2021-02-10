@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import ReactToolTip from "react-tooltip";
 import DispatchContext from "../DispatchContext";
@@ -11,6 +11,7 @@ function HeaderLoggedIn(props) {
 
   function handleSignout() {
     appDispatch({ type: "LOGOUT" });
+    appDispatch({ type: "FLASH_MESSAGE", value: "You have been logged out", status: "warning" });
   }
   function handleSearchIcon(e) {
     e.preventDefault();
