@@ -4,7 +4,7 @@ import ReactToolTip from "react-tooltip";
 import DispatchContext from "../DispatchContext";
 import StateContext from "../StateContext";
 
-function HeaderLoggedIn(props) {
+function HeaderLoggedIn() {
   // curly brackets are because we are destructuring an object what is being returned by context
   const appDispatch = useContext(DispatchContext);
   const appState = useContext(StateContext);

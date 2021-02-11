@@ -22,7 +22,7 @@ function HeaderLoggedOut(props) {
         // console.table(resposne.data);
       } else {
         console.log("Incorrect username / password");
-        appDispatch({ type: "FLASH_MESSAGE", value: "Invalid username / password", status: "fail" });
+        appDispatch({ type: "FLASH_MESSAGE", value: "Invalid username / password", status: "danger" });
       }
     } catch (e) {
       console.table(e.response.data);

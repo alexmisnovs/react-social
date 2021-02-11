@@ -271,6 +271,7 @@ function HomeGuest() {
           appDispatch({ type: "LOGIN", data: response.data });
           appDispatch({ type: "FLASH_MESSAGE", value: "Congrats, welcome to your new account", status: "success" });
         } catch (e) {
+          appDispatch({ type: "FLASH_MESSAGE", value: "We are sorry, we are experiencing technical issues", status: "danger" });
           console.log("There was a problem, with registering the user");
         }
       }

@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
@@ -30,8 +30,7 @@ function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("SocialAppToken")),
     flashMessages: [],
-    flashMessageStatus: false,
-    flashMessagesSeen: 0,
+    flashMessageStatus: "",
     user: {
       token: localStorage.getItem("SocialAppToken"),
       username: localStorage.getItem("SocialAppUsername"),
@@ -55,7 +54,6 @@ function Main() {
         // using push instaed of concat because immer gives us a copy of the state
         draft.flashMessages.push(action.value);
         draft.flashMessageStatus = action.status;
-        draft.flashMessagesSeen++;
         return;
       case "OPEN_SEARCH":
         draft.isSearchOpen = true;
@@ -78,7 +76,6 @@ function Main() {
       case "CLEAR_SEEN_FLASH_MESSAGES":
         draft.flashMessages = [];
         draft.flashMessageStatus = "";
-        draft.flashMessagesSeen = 0;
         return;
     }
   }
@@ -116,14 +113,40 @@ function Main() {
 
   //cleanup Displayed Flash Messages?
   useEffect(() => {
-    if (state.flashMessagesSeen > 0) {
+    if (state.flashMessages.length > 0) {
       const delay = setTimeout(() => {
         dispatch({ type: "CLEAR_SEEN_FLASH_MESSAGES" });
-      }, 1000);
+      }, 5000);
       // cleanup function will also run next time this useEffect will run again.
       return () => clearTimeout(delay);
     }
-  }, [state.flashMessagesSeen]);
+  }, [state.flashMessages.length]);
+
+  // check if Token has expired or not on first render
+  useEffect(() => {
+    if (state.loggedIn) {
+      const ourRequest = Axios.CancelToken.source();
+      // searching only the posts.
+      async function checkToken() {
+        try {
+          const response = await Axios.post(`/checkToken`, { token: state.user.token }, { cancelToken: ourRequest.token });
+          // only if we get FALSE from the server
+          if (!response.data) {
+            dispatch({ type: "LOGOUT" });
+            dispatch({ type: "FLASH_MESSAGE", value: "Your session expired, please login", status: "warning" });
+          }
+          // setIsLoading(false);
+        } catch (e) {
+          console.log("There was a problem, with Search Post Request");
+        }
+      }
+      checkToken();
+      // cleanup
+      return () => {
+        ourRequest.cancel();
+      };
+    }
+  }, []);
 
   return (
     <StateContext.Provider value={state}>
