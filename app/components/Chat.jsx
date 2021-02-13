@@ -5,14 +5,14 @@ import io from "socket.io-client";
 
 import StateContext from "../StateContext";
 import DispatchContext from "../DispatchContext";
-
+// possibly its a good idea to connect socket only when chat opens up
 const socket = io("http://127.0.0.1:8080", {
   reconnection: false
 });
 
-console.log("check 1", socket.connected);
+// console.log("check 1", socket.connected);
 socket.on("connect", function () {
-  console.log("check 2", socket.connected);
+  console.log("check 2, socket connected", socket.connected);
 });
 
 function Chat() {

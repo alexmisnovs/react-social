@@ -24,7 +24,7 @@ function Home(props) {
           draft.isLoading = false;
           draft.feed = response.data;
         });
-        console.log(response.data);
+        // console.log(response.data);
       } catch (e) {
         console.log("there was a problem fetching homepage posts");
       }
@@ -36,7 +36,7 @@ function Home(props) {
     };
   }, []); // running only when mounted
 
-  console.log(state);
+  // console.log(state);
   if (state.isLoading) {
     return <LoadingIcon />;
   }

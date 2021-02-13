@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
@@ -24,6 +24,7 @@ import Chat from "./components/Chat";
 //State Contexts
 import StateContext from "./StateContext";
 import DispatchContext from "./DispatchContext";
+import Unauthorized from "./components/Unauthorized";
 
 function Main() {
   // reducer
@@ -49,6 +50,12 @@ function Main() {
         return;
       case "LOGOUT":
         draft.loggedIn = false;
+        draft.user = {
+            token: '',
+            username: '',
+            avatar:  '' 
+        }
+
         return;
       case "FLASH_MESSAGE":
         // using push instaed of concat because immer gives us a copy of the state
@@ -93,6 +100,7 @@ function Main() {
       localStorage.removeItem("SocialAppAvatar");
       // need to refresh the page otherwise can still access stuff after logout
       dispatch({ type: "LOGOUT" });
+      
     }
   }, [state.loggedIn]);
 
@@ -137,7 +145,7 @@ function Main() {
           }
           // setIsLoading(false);
         } catch (e) {
-          console.log("There was a problem, with Search Post Request");
+          console.log("There was a problem, with check token Request");
         }
       }
       checkToken();
@@ -148,6 +156,27 @@ function Main() {
     }
   }, []);
 
+  // Make some routes auth protected?
+  function PrivateRoute({ children, ...rest }) {
+    let user = state.user.username;
+    return (
+      <Route
+        {...rest}
+        render={({ location }) =>
+          user ? (
+            children
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/unauthorized",
+                state: { from: location }
+              }}
+            />
+          )
+        }
+      />
+    );
+  }
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
@@ -160,23 +189,26 @@ function Main() {
             <Route path="/" exact>
               {state.loggedIn ? <Home /> : <HomeGuest />}
             </Route>
-            <Route path="/create-post">
+            <PrivateRoute path="/create-post">
               <CreatePost />
-            </Route>
+            </PrivateRoute>
             <Route path="/profile/:username">
               <Profile />
             </Route>
             <Route path="/post/:id" exact>
               <ViewSinglePost />
             </Route>
-            <Route path="/post/:id/edit" exact>
+            <PrivateRoute path="/post/:id/edit" exact>
               <EditPost />
-            </Route>
+            </PrivateRoute>
             <Route path="/about-us">
               <About />
             </Route>
             <Route path="/terms">
               <Terms />
+            </Route>
+            <Route path="/unauthorized">
+              <Unauthorized />
             </Route>
             <Route>
               <NotFound />

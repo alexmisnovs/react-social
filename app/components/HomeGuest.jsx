@@ -179,7 +179,7 @@ function HomeGuest() {
         }
         return;
       case "SUBMIT_FORM":
-        if (!draft.username.hasErrors && draft.username.isUnique && !draft.email.hasErrors && draft.email.isUnique & !draft.password.hasErrors) {
+        if (!draft.username.hasErrors && draft.username.isUnique && !draft.email.hasErrors && draft.email.isUnique && !draft.password.hasErrors) {
           draft.submitCount++;
         }
         return;

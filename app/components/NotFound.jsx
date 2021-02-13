@@ -26,11 +26,13 @@ function NotFound(props) {
         </div>
       </Page>
     );
-  } else {
+  } 
+else {
     return (
       <Page title="Not Found.. ">
         <div className="text-center">
-          <h2>Whoops, we cannot find what you are looking for</h2>
+          <h2>Whoops..</h2>
+          <p className="lead text-muted">Sorry, we cannot find what you are looking for..</p>
           <p className="lead text-muted">
             You can always visit our <Link to="/">Homepage</Link>!
           </p>
