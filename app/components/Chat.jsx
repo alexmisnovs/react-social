@@ -5,17 +5,9 @@ import io from "socket.io-client";
 
 import StateContext from "../StateContext";
 import DispatchContext from "../DispatchContext";
-// possibly its a good idea to connect socket only when chat opens up
-const socket = io("http://127.0.0.1:8080", {
-  reconnection: false
-});
-
-// console.log("check 1", socket.connected);
-socket.on("connect", function () {
-  console.log("check 2, socket connected", socket.connected);
-});
 
 function Chat() {
+  const socket = useRef(null);
   const chatField = useRef(null);
   const chatLog = useRef(null);
   const appState = useContext(StateContext);
@@ -42,11 +34,21 @@ function Chat() {
   }, [appState.isChatOpen]);
 
   useEffect(() => {
-    socket.on("chatFromServer", message => {
+    // possibly its a good idea to connect socket only when chat opens up
+    socket.current = io("http://127.0.0.1:8080", {
+      reconnection: false
+    });
+
+    // console.log("check 1", socket.connected);
+    socket.current.on("connect", function () {
+      console.log("check 2, socket connected", socket.connected);
+    });
+    socket.current.on("chatFromServer", message => {
       setState(draft => {
         draft.chatMessages.push(message);
       });
     });
+    return () => socket.current.disconnect();
   }, []);
 
   // make sure chat stays on the bottom
@@ -75,7 +77,7 @@ function Chat() {
     e.preventDefault();
     //finished here
     // send message to chat server
-    socket.emit("chatFromBrowser", {
+    socket.current.emit("chatFromBrowser", {
       token: appState.user.token,
       message: state.fieldValue
     });
