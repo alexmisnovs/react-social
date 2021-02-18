@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 
-Axios.defaults.baseURL = "http://127.0.0.1:8080";
+Axios.defaults.baseURL = process.env.BACKENDURL || "";
 //Components
 import Footer from "./components/Footer";
 import Header from "./components/Header";
