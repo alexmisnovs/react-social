@@ -4,15 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack serve --mode development --env development",
-    "build": "webpack",
-    "preview" : "node preview.js"
+    "dev": "npm-run-all -s generate webpackDev",
+    "webpackDev": "webpack serve --mode development --env development",
+    "build": "npm-run-all -s generate webpackBuild ",
+    "webpackBuild": "webpack",
+    "preview": "node preview.js",
+    "generate": "babel-node --presets=@babel/preset-react,@babel/preset-env generate-html.jsx"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.17",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "axios": "^0.21.1",
@@ -24,6 +28,7 @@
     "html-webpack-harddisk-plugin": "^2.0.0",
     "html-webpack-plugin": "^5.1.0",
     "immer": "^8.0.0",
+    "npm-run-all": "^4.1.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-markdown": "^5.0.3",

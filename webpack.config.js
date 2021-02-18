@@ -62,7 +62,7 @@ config = {
   }
 };
 
-if(currentTask == "dev"){
+if(currentTask == "webpackDev"){
   config.devtool = "source-map",
   config.devServer = {
     host: "127.0.0.1",
@@ -73,7 +73,7 @@ if(currentTask == "dev"){
   }
 }
 
-if(currentTask == "build") {
+if(currentTask == "webpackBuild") {
   config.plugins.push(new CleanWebpackPlugin(), new RunAfterCompile())
   config.mode = "production"
   config.output = {
