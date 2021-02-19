@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 
-Axios.defaults.baseURL = process.env.BACKENDURL || "";
+Axios.defaults.baseURL = process.env.BACKENDURL || "https://rsbackendapi.herokuapp.com";
 //Components
 import Footer from "./components/Footer";
 import Header from "./components/Header";

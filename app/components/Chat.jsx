@@ -35,7 +35,7 @@ function Chat() {
 
   useEffect(() => {
     // possibly its a good idea to connect socket only when chat opens up
-    socket.current = io("http://127.0.0.1:8080", {
+    socket.current = io(process.env.BACKENDURL || "https://rsbackendapi.herokuapp.com", {
       reconnection: false
     });
 
