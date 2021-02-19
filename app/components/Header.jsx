@@ -14,7 +14,7 @@ function Header(props) {
         <h4 className="my-0 mr-md-auto font-weight-normal">
           <Link to="/" className="text-white">
             {/* {process.env.APP_LOGO_TEXT ? process.env.APP_LOGO_TEXT : "Social App!"} */}
-            Social App
+            Pupsiki Social App
           </Link>
         </h4>
         {!props.staticEmpty ? headerContent : ""}

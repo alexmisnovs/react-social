@@ -21,7 +21,7 @@ function Footer() {
         Copyright &copy; 2020{" "}
         <a href="/" className="text-muted">
           {/* {process.env.APP_NAME ? process.env.APP_NAME : "Social App"} */}
-          Social App
+          Pupsiki Social App
         </a>
         . All rights reserved.
       </p>
