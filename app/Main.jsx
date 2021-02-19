@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 
-Axios.defaults.baseURL = "http://127.0.0.1:8080";
+Axios.defaults.baseURL = process.env.BACKENDURL || "https://rsbackendapi.herokuapp.com";
 //Components
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -21,8 +21,10 @@ import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import NotFound from "./components/NotFound";
-import Search from "./components/Search";
-import Chat from "./components/Chat";
+// import Search from "./components/Search";
+const Search = React.lazy(() => import("./components/Search"));
+const Chat = React.lazy(() => import("./components/Chat"));
+// import Chat from "./components/Chat";
 import Unauthorized from "./components/Unauthorized";
 import LoadingIcon from "./components/LoadingIcon";
 
@@ -219,9 +221,14 @@ function Main() {
             </Switch>
           </Suspense>
           <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
-            <Search />
+            <div className="search-overlay">
+              <Suspense fallback="">
+                <Search />
+              </Suspense>
+            </div>
           </CSSTransition>
-          <Chat />
+          <Suspense fallback="">{state.loggedIn && <Chat />}</Suspense>
+
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>

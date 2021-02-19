@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState, useContext } from "react";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
@@ -6,8 +5,6 @@ import { CSSTransition } from "react-transition-group";
 import DispatchContext from "../DispatchContext";
 
 function HeaderLoggedOut(props) {
-
-  
   const appDispatch = useContext(DispatchContext);
 
   const [username, setUsername] = useState();
@@ -21,23 +18,6 @@ function HeaderLoggedOut(props) {
     dispatch({ type: "PASSWORD_IMMEDIATELY", value: state.password.value });
     dispatch({ type: "PASSWORD_AFTER_DELAY", value: state.password.value });
     dispatch({ type: "SUBMIT_FORM" });
-
-    // try {
-    //   const host = "/login";
-    //   const response = await Axios.post(host, { username, password });
-    //   // console.table(resposne.data);
-    //   if (response.data) {
-    //     //set loggedIn to true if obviously correct details
-    //     appDispatch({ type: "LOGIN", data: response.data });
-    //     appDispatch({ type: "FLASH_MESSAGE", value: "You have successfully logged in", status: "success" });
-    //     // console.table(resposne.data);
-    //   } else {
-    //     console.log("Incorrect username / password");
-    //     appDispatch({ type: "FLASH_MESSAGE", value: "Invalid username / password", status: "danger" });
-    //   }
-    // } catch (e) {
-    //   console.table(e.response.data);
-    // }
   }
   const usernameInput = useRef(null);
   const passwordInput = useRef(null);
@@ -173,14 +153,14 @@ function HeaderLoggedOut(props) {
         try {
           const response = await Axios.post(`/login`, { username: state.username.value, password: state.password.value }, { cancelToken: ourRequest.token });
           if (response.data) {
-                //set loggedIn to true if obviously correct details
-                appDispatch({ type: "LOGIN", data: response.data });
-                appDispatch({ type: "FLASH_MESSAGE", value: "You have successfully logged in", status: "success" });
-                // console.table(resposne.data);
-              } else {
-                console.log("Incorrect username / password");
-                appDispatch({ type: "FLASH_MESSAGE", value: "Invalid username / password", status: "danger" });
-              } 
+            //set loggedIn to true if obviously correct details
+            appDispatch({ type: "LOGIN", data: response.data });
+            appDispatch({ type: "FLASH_MESSAGE", value: "You have successfully logged in", status: "success" });
+            // console.table(resposne.data);
+          } else {
+            console.log("Incorrect username / password");
+            appDispatch({ type: "FLASH_MESSAGE", value: "Invalid username / password", status: "danger" });
+          }
         } catch (e) {
           appDispatch({ type: "FLASH_MESSAGE", value: "We are sorry, we are experiencing technical issues", status: "danger" });
           console.log("There was a problem, with registering the user");
@@ -198,15 +178,15 @@ function HeaderLoggedOut(props) {
     <form onSubmit={handleSubmit} className="mb-0 pt-2 pt-md-0">
       <div className="row align-items-center">
         <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-          <input ref={usernameInput} onChange={e => dispatch({type: "USERNAME_IMMEDIATELY", value: e.target.value})} name="username" className="form-control form-control-sm input-dark" type="text" placeholder="Username" autoComplete="off" />
+          <input ref={usernameInput} onChange={e => dispatch({ type: "USERNAME_IMMEDIATELY", value: e.target.value })} name="username" className="form-control form-control-sm input-dark" type="text" placeholder="Username" autoComplete="off" />
           <CSSTransition in={state.username.hasErrors} timeout={330} classNames="liveValidateMessage" unmountOnExit>
-                <div className="alert alert-danger small liveValidateMessage">{state.username.message}</div>
+            <div className="alert alert-danger small liveValidateMessage">{state.username.message}</div>
           </CSSTransition>
         </div>
         <div className="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-          <input ref={passwordInput} onChange={e => dispatch({type: "PASSWORD_IMMEDIATELY", value: e.target.value})} name="password" className="form-control form-control-sm input-dark" type="password" placeholder="Password" />
+          <input ref={passwordInput} onChange={e => dispatch({ type: "PASSWORD_IMMEDIATELY", value: e.target.value })} name="password" className="form-control form-control-sm input-dark" type="password" placeholder="Password" />
           <CSSTransition in={state.password.hasErrors} timeout={330} classNames="liveValidateMessage" unmountOnExit>
-                <div className="alert alert-danger small liveValidateMessage">{state.password.message}</div>
+            <div className="alert alert-danger small liveValidateMessage">{state.password.message}</div>
           </CSSTransition>
         </div>
         <div className="col-md-auto">
@@ -216,6 +196,5 @@ function HeaderLoggedOut(props) {
     </form>
   );
 }
-
 
 export default HeaderLoggedOut;
