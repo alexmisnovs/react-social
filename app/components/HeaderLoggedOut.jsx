@@ -10,9 +10,6 @@ function HeaderLoggedOut(props) {
   
   const appDispatch = useContext(DispatchContext);
 
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-
   async function handleSubmit(e) {
     e.preventDefault();
 

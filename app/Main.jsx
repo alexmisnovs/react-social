@@ -89,7 +89,7 @@ function Main() {
 
   const [state, dispatch] = useImmerReducer(ourReducer, initialState);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (state.loggedIn) {
       localStorage.setItem("SocialAppToken", state.user.token);
       localStorage.setItem("SocialAppUsername", state.user.username);
