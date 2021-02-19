@@ -2,6 +2,7 @@
 .vscode/
 node_modules/
 build
+dist
 .DS_Store
 *.tgz
 my-app*
@@ -13,3 +14,5 @@ yarn-error.log*
 /.changelog
 .npm/
 yarn.lock
+webpack-new.config.js
+.env

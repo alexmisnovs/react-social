@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 
-Axios.defaults.baseURL = "http://127.0.0.1:8080";
+Axios.defaults.baseURL = process.env.BACKENDURL || "https://rsbackendapi.herokuapp.com";
 //Components
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -13,18 +13,24 @@ import HomeGuest from "./components/HomeGuest";
 import Home from "./components/Home";
 import About from "./components/About";
 import Terms from "./components/Terms";
-import CreatePost from "./components/CreatePost";
-import ViewSinglePost from "./components/ViewSinglePost";
+// import CreatePost from "./components/CreatePost";
+const CreatePost = React.lazy(() => import("./components/CreatePost"));
+const ViewSinglePost = React.lazy(() => import("./components/ViewSinglePost"));
+// import ViewSinglePost from "./components/ViewSinglePost";
 import FlashMessages from "./components/FlashMessages";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import NotFound from "./components/NotFound";
-import Search from "./components/Search";
-import Chat from "./components/Chat";
+// import Search from "./components/Search";
+const Search = React.lazy(() => import("./components/Search"));
+const Chat = React.lazy(() => import("./components/Chat"));
+// import Chat from "./components/Chat";
+import Unauthorized from "./components/Unauthorized";
+import LoadingIcon from "./components/LoadingIcon";
+
 //State Contexts
 import StateContext from "./StateContext";
 import DispatchContext from "./DispatchContext";
-import Unauthorized from "./components/Unauthorized";
 
 function Main() {
   // reducer
@@ -51,10 +57,10 @@ function Main() {
       case "LOGOUT":
         draft.loggedIn = false;
         draft.user = {
-            token: '',
-            username: '',
-            avatar:  '' 
-        }
+          token: "",
+          username: "",
+          avatar: ""
+        };
 
         return;
       case "FLASH_MESSAGE":
@@ -100,7 +106,6 @@ function Main() {
       localStorage.removeItem("SocialAppAvatar");
       // need to refresh the page otherwise can still access stuff after logout
       dispatch({ type: "LOGOUT" });
-      
     }
   }, [state.loggedIn]);
 
@@ -184,40 +189,46 @@ function Main() {
           <Header />
 
           <FlashMessages messages={state.flashMessages} status={state.flashMessageStatus} />
-
-          <Switch>
-            <Route path="/" exact>
-              {state.loggedIn ? <Home /> : <HomeGuest />}
-            </Route>
-            <PrivateRoute path="/create-post">
-              <CreatePost />
-            </PrivateRoute>
-            <Route path="/profile/:username">
-              <Profile />
-            </Route>
-            <Route path="/post/:id" exact>
-              <ViewSinglePost />
-            </Route>
-            <PrivateRoute path="/post/:id/edit" exact>
-              <EditPost />
-            </PrivateRoute>
-            <Route path="/about-us">
-              <About />
-            </Route>
-            <Route path="/terms">
-              <Terms />
-            </Route>
-            <Route path="/unauthorized">
-              <Unauthorized />
-            </Route>
-            <Route>
-              <NotFound />
-            </Route>
-          </Switch>
+          <Suspense fallback={<LoadingIcon />}>
+            <Switch>
+              <Route path="/" exact>
+                {state.loggedIn ? <Home /> : <HomeGuest />}
+              </Route>
+              <PrivateRoute path="/create-post">
+                <CreatePost />
+              </PrivateRoute>
+              <Route path="/profile/:username">
+                <Profile />
+              </Route>
+              <Route path="/post/:id" exact>
+                <ViewSinglePost />
+              </Route>
+              <PrivateRoute path="/post/:id/edit" exact>
+                <EditPost />
+              </PrivateRoute>
+              <Route path="/about-us">
+                <About />
+              </Route>
+              <Route path="/terms">
+                <Terms />
+              </Route>
+              <Route path="/unauthorized">
+                <Unauthorized />
+              </Route>
+              <Route>
+                <NotFound />
+              </Route>
+            </Switch>
+          </Suspense>
           <CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit>
-            <Search />
+            <div className="search-overlay">
+              <Suspense fallback="">
+                <Search />
+              </Suspense>
+            </div>
           </CSSTransition>
-          <Chat />
+          <Suspense fallback="">{state.loggedIn && <Chat />}</Suspense>
+
           <Footer />
         </BrowserRouter>
       </DispatchContext.Provider>

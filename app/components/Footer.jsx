@@ -20,7 +20,8 @@ function Footer() {
       <p className="m-0">
         Copyright &copy; 2020{" "}
         <a href="/" className="text-muted">
-          ComplexApp
+          {/* {process.env.APP_NAME ? process.env.APP_NAME : "Social App"} */}
+          Pupsiki Social App
         </a>
         . All rights reserved.
       </p>
