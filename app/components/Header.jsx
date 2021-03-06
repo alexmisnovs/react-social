@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import HeaderLoggedOut from "./HeaderLoggedOut";
 import HeaderLoggedIn from "./HeaderLoggedIn";
 import StateContext from "../StateContext";
-import dotenv from "dotenv";
-dotenv.config();
 
 function Header(props) {
   // in use state we can provide initial value
