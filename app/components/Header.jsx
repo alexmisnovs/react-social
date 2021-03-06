@@ -13,8 +13,7 @@ function Header(props) {
       <div className="container d-flex flex-column flex-md-row align-items-center p-3">
         <h4 className="my-0 mr-md-auto font-weight-normal">
           <Link to="/" className="text-white">
-            {/* {process.env.APP_LOGO_TEXT ? process.env.APP_LOGO_TEXT : "Social App!"} */}
-            Pupsiki Social App
+            {process.env.APP_LOGO_TEXT ? process.env.APP_LOGO_TEXT : "Social App!"}
           </Link>
         </h4>
         {!props.staticEmpty ? headerContent : ""}

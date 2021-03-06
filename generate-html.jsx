@@ -6,6 +6,8 @@ import Header from "./app/components/Header";
 import LoadingDotsIcon from "./app/components/LoadingIcon";
 import { StaticRouter as Router } from "react-router-dom";
 import StateContext from "./app/StateContext";
+import dotenv from "dotenv";
+dotenv.config();
 
 function Shell() {
   return (
